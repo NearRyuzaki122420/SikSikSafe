@@ -27,6 +27,7 @@ SEND_INTERVAL_SECONDS = float(os.getenv("SEND_INTERVAL_SECONDS", "3"))
 INPUT_MODE = os.getenv("INPUT_MODE", "live").strip().lower()
 DATASET_DIR = os.getenv("DATASET_VIDEO_DIR", "ViolenceDetectioDataset")
 DATASET_FRAME_STRIDE = max(1, int(os.getenv("DATASET_FRAME_STRIDE", "2")))
+DATASET_MAX_VIDEOS = max(1, int(os.getenv("DATASET_MAX_VIDEOS", "10")))
 DATASET_SUMMARY_PATH = os.getenv("DATASET_SUMMARY_PATH", "")
 SNAPSHOT_DIR = os.getenv("SNAPSHOT_DIR", "snapshots")
 
@@ -360,7 +361,15 @@ def run_dataset_mode(dataset_dir: str):
         print(f"No .mp4 videos found in dataset path: {dataset_path.resolve()}")
         return
 
-    print(f"Found {len(video_files)} MP4 videos in {dataset_path.resolve()}")
+    if len(video_files) > DATASET_MAX_VIDEOS:
+        print(
+            f"Found {len(video_files)} MP4 videos. "
+            f"Using first {DATASET_MAX_VIDEOS} for prototype run."
+        )
+        video_files = video_files[:DATASET_MAX_VIDEOS]
+    else:
+        print(f"Found {len(video_files)} MP4 videos in {dataset_path.resolve()}")
+
     summary = []
     risk_rank = {"LOW": 0, "MEDIUM": 1, "HIGH": 2}
 
