@@ -7,6 +7,8 @@ does not use any DVR/RTSP camera sources.
 
 import os
 import time
+import importlib.util
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -18,7 +20,42 @@ os.environ.setdefault(
     r"C:\Users\Acer\Downloads\ViolenceDetectionDataset",
 )
 
-import app as base
+
+def load_base_app_module():
+    base_path = Path(__file__).with_name("app.py")
+    if not base_path.exists():
+        raise RuntimeError(f"Base app file not found: {base_path}")
+
+    module_name = "siksiksafe_base_app"
+    spec = importlib.util.spec_from_file_location(module_name, base_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load base app module from {base_path}")
+
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    required_attributes = [
+        "INPUT_MODE",
+        "DATASET_DIR",
+        "run_dataset_mode",
+        "create_source_state",
+        "process_frame",
+        "FRAME_SIZE",
+        "SHOW_WINDOW",
+    ]
+    missing = [attr for attr in required_attributes if not hasattr(module, attr)]
+    if missing:
+        missing_text = ", ".join(missing)
+        raise RuntimeError(
+            "Your app.py does not contain the expected base pipeline. "
+            f"Missing attributes: {missing_text}. "
+            "Restore the original base app.py, then run app_laptop.py for webcam mode."
+        )
+
+    return module
+
+
+base = load_base_app_module()
 
 LAPTOP_CAMERA_INDEX = int(os.getenv("LAPTOP_CAMERA_INDEX", "0"))
 LAPTOP_ZONE_NAME = os.getenv("LAPTOP_ZONE_NAME", "Laptop Camera")
