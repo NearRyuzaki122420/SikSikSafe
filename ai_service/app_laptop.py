@@ -11,6 +11,13 @@ import time
 import cv2
 import numpy as np
 
+# Default dataset path for your local Windows machine.
+# This can still be overridden by setting DATASET_VIDEO_DIR.
+os.environ.setdefault(
+    "DATASET_VIDEO_DIR",
+    r"C:\Users\Acer\Downloads\ViolenceDetectionDataset",
+)
+
 import app as base
 
 LAPTOP_CAMERA_INDEX = int(os.getenv("LAPTOP_CAMERA_INDEX", "0"))
