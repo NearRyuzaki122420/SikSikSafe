@@ -17,7 +17,7 @@ class _ChartPageState extends State<ChartPage> {
     "HIGH": 0,
   };
 
-  final String url = "http://192.168.1.16:5000/api/stats/risk-counts";
+  final String url = "http://192.168.1.5:5000/api/stats/risk-counts";
 
   @override
   void initState() {

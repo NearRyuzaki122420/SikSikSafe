@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   String message = "";
 
-  final String baseUrl = "http://192.168.1.16:5000/api/auth";
+  final String baseUrl = "http://192.168.100.6:5000/api/auth";
 
   Future<void> login() async {
     setState(() {

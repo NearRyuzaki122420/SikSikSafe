@@ -11,7 +11,7 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   List history = [];
-  final String url = "http://192.168.1.16:5000/api/crowd-data";
+  final String url = "http://192.168.100.6:5000/api/crowd-data";
 
   @override
   void initState() {
